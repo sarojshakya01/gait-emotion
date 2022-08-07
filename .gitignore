@@ -1,0 +1,6 @@
+.vs
+*.pyc
+data/*
+model*
+.vscode
+__pycache__
