@@ -1,0 +1,7 @@
+.vs
+*.pyc
+data*
+data/*
+model*
+.vscode
+__pycache__
