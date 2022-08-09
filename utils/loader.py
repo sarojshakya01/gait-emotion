@@ -31,22 +31,22 @@ def load_data_npy(_path, _ftype, test_size=0.1):
 
     if n == 0:
       datacount['angry'] += 1
-      if datacount['angry'] <= 80:
+      if datacount['angry'] <= 1000:
         new_data.append(data[count])
         new_label.append(n)
     elif n == 1:
       datacount['neutral'] += 1
-      if datacount['neutral'] <= 80:
+      if datacount['neutral'] <= 1000:
         new_data.append(data[count])
         new_label.append(n)
     elif n == 2:
       datacount['happy'] += 1
-      if datacount['happy'] <= 100:
+      if datacount['happy'] <= 1000:
         new_data.append(data[count])
         new_label.append(n)
     elif n == 3:
       datacount['sad'] += 1
-      if datacount['sad'] <= 79:
+      if datacount['sad'] <= 1000:
         new_data.append(data[count])
         new_label.append(n)
     count += 1

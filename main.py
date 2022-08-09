@@ -41,7 +41,7 @@ parser.add_argument('--work-dir', type=str, default=model_path, metavar='WD', he
 # TO ADD: save_result
 
 args = parser.parse_args()
-device = 'cuda:0'
+device = 'cpu' #'cuda:0'
 
 test_size = 0.1
 # data, labels, data_train, labels_train, data_test, labels_test = loader.load_data(

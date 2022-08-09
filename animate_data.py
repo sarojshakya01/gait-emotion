@@ -1,7 +1,10 @@
 from itertools import cycle
 import numpy as np
+import sys
 
-from utils.plot_lines_2d import plot_and_animate
+sys.path.append('../test')
+
+from test.plot_lines_2d import plot_and_animate
 
 import os
 import h5py

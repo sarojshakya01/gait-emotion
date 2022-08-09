@@ -227,7 +227,7 @@ class Processor(object):
     if not os.path.isdir(self.args.work_dir):
       os.mkdir(self.args.work_dir)
     self.model = classifier.Classifier(C, num_classes, graph_dict)
-    self.model.cuda('cuda:0')
+    # self.model.cuda('cuda:0')
     self.model.apply(weights_init)
 
     self.loss = nn.CrossEntropyLoss()
