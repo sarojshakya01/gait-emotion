@@ -1,14 +1,11 @@
-
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 import os
 
-
 current_dir = os.path.dirname(os.path.realpath(__file__))
 data = np.load("test.npy")
-data = np.load(os.path.join(current_dir, "../data/features_bhatta.npy"))
-
+# data = np.load(os.path.join(current_dir, "../data/features_bhatta.npy"))
 
 data = data[0:1]
 clips = data
@@ -27,8 +24,8 @@ for ai in range(len(animations)):
   anim = np.swapaxes(animations[ai][0].copy(), 0, 1)
   joints = anim[:, :]
   joints = joints.reshape((len(joints), -1, 2))
-  joints[:, :, 0] *= 1000
-  joints[:, :, 1] *= 1000
+  # joints[:, :, 0] *= 1000
+  # joints[:, :, 1] *= 1000
 
   animations[ai] = joints
 
@@ -230,13 +227,12 @@ def drawLines2(frame):
     ax.plot(x_values, y_values, 'bo', linestyle="-")
 
 
-
 mat, = ax.plot(1000, 1000, 'o')
 
 # line, = plt.plot(0, 0,color='g',lw='0.5')
 
-def animate(i):
 
+def animate(i):
 
   if i < total_frames:
 
@@ -246,8 +242,8 @@ def animate(i):
     frame = animations[0][i]
     ax.clear()
     ax.axis([-200, 800, -500, 400])
-    drawLines2(frame)
-    
+    drawLines(frame)
+
     return mat,
 
 

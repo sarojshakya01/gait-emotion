@@ -31,7 +31,7 @@ def load_data_npy(_path, _ftype, test_size=0.1):
 
     if n == 0:
       datacount['angry'] += 1
-      if datacount['angry'] <= 1000:
+      if datacount['angry'] <= 1048:
         new_data.append(data[count])
         new_label.append(n)
     elif n == 1:

@@ -61,8 +61,9 @@ if args.train:
   pr.train(data_test[0:1], labels_test[0:1])
 else:
   pr = processor.Processor(args, None, coords, num_classes, graph_dict, device=device, verbose=True, model_file=model_path + "\epoch54_acc73.33_model.pth.tar")
-  pr.generate_confusion_matrix(None, data, labels, num_classes, 16, 3)
-  
+
+  pr.generate_confusion_matrix(None, data, labels, num_classes, joints, coords)
+
   labels_pred, vecs_pred = pr.generate_predictions(data_test[:], num_classes, joints, coords)
   for idx in range(labels_pred.shape[0]):
     print('S.N.: {0:<4}\t Actual: {1:<10} \tPredicted: {2:<10}'.format(str(idx + 1), emotions[int(labels_test[idx])], emotions[int(labels_pred[idx])]))

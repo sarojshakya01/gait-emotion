@@ -154,6 +154,7 @@ def get_best_epoch_and_accuracy(path_to_model_files):
 
 
 def plot_confusion_matrix(confusion_matrix, title='CM', fontsize=50):
+  print(confusion_matrix)
   mpl.style.use('seaborn')
   rcParams['text.usetex'] = True
   rcParams['axes.titlepad'] = 20
@@ -192,6 +193,7 @@ def plot_confusion_matrix(confusion_matrix, title='CM', fontsize=50):
 
   # Add a table at the bottom of the axes
   the_table = plt.table(cellText=cell_text, rowLabels=rows, rowColours=colors, colLabels=columns, loc='bottom')
+  print(the_table)
   the_table.set_fontsize(fontsize)
   the_table.scale(1, fontsize / 7)
 
@@ -202,7 +204,7 @@ def plot_confusion_matrix(confusion_matrix, title='CM', fontsize=50):
     tick.label.set_fontsize(fontsize)
   plt.ylabel("\# predictions of each class", fontsize=fontsize)
   plt.xticks([])
-  fig.savefig('figures/' + title + '.png', bbox_inches='tight')
+  fig.savefig("C:\\Users\\saroj\\Documents\\ukg\\gait\\gait-emotion\\figures\\" + title + '.png', bbox_inches='tight')
 
 
 class Processor(object):
@@ -436,7 +438,8 @@ class Processor(object):
     else:
       best_accuracy = self.best_accuracy.item()
 
-    filename = os.path.join(self.args.work_dir, 'epoch{}_acc{:.2f}_model.pth.tar'.format(self.best_epoch, best_accuracy))
+    # filename = os.path.join(self.args.work_dir, 'epoch{}_acc{:.2f}_model.pth.tar'.format(self.best_epoch, best_accuracy))
+    filename = os.path.join(self.args.work_dir, 'epoch54_acc73.33_model.pth.tar')
     self.model.load_state_dict(torch.load(filename))
 
   def generate_predictions(self, data, num_classes, joints, coords):
@@ -464,7 +467,7 @@ class Processor(object):
 
   def generate_confusion_matrix(self, ftype, data, labels, num_classes, joints, coords):
     self.load_best_model()
-    labels_pred = self.generate_predictions(data, num_classes, joints, coords)
+    labels_pred, vecs_pred = self.generate_predictions(data, num_classes, joints, coords)
 
     hit = np.nonzero(labels_pred == labels)
     miss = np.nonzero(labels_pred != labels)
