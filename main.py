@@ -22,7 +22,7 @@ parser.add_argument('--save-features', type=lambda x: (str(x).lower() == 'true')
 parser.add_argument('--batch-size', type=int, default=6, metavar='B', help='input batch size for training (default: 6)')
 parser.add_argument('--num-worker', type=int, default=4, metavar='W', help='input batch size for training (default: 4)')
 parser.add_argument('--start_epoch', type=int, default=0, metavar='SE', help='starting epoch of training (default: 0)')
-parser.add_argument('--num_epoch', type=int, default=100, metavar='NE', help='number of epochs to train (default: 500)')
+parser.add_argument('--num_epoch', type=int, default=500, metavar='NE', help='number of epochs to train (default: 500)')
 parser.add_argument('--optimizer', type=str, default='Adam', metavar='O', help='optimizer (default: Adam)')
 parser.add_argument('--base-lr', type=float, default=0.01, metavar='L', help='base learning rate (default: 0.01)')
 parser.add_argument('--step', type=list, default=[0.5, 0.75, 0.875], metavar='[S]', help='fraction of steps when learning rate will be decreased (default: [0.5, 0.75, 0.875])')
@@ -33,7 +33,7 @@ parser.add_argument('--eval-interval', type=int, default=5, metavar='EI', help='
 parser.add_argument('--log-interval', type=int, default=100, metavar='LI', help='interval after which log is printed (default: 100)')
 parser.add_argument('--topk', type=list, default=[1], metavar='[K]', help='top K accuracy to show (default: [1])')
 parser.add_argument('--no-cuda', action='store_true', default=False, help='disables CUDA training')
-parser.add_argument('--pavi-log', action='store_true', default=False, help='pavi log')
+parser.add_argument('--pavi-log', action='store_true', default=True, help='pavi log')
 parser.add_argument('--print-log', action='store_true', default=True, help='print log')
 parser.add_argument('--save-log', action='store_true', default=True, help='save log')
 parser.add_argument('--work-dir', type=str, default=model_path, metavar='WD', help='path to save')
@@ -41,7 +41,7 @@ parser.add_argument('--work-dir', type=str, default=model_path, metavar='WD', he
 # TO ADD: save_result
 
 args = parser.parse_args()
-device = 'cpu' #'cuda:0'
+device = 'cuda:0'
 
 test_size = 0.1
 # data, labels, data_train, labels_train, data_test, labels_test = loader.load_data(
@@ -50,6 +50,7 @@ data, labels, data_train, labels_train, data_test, labels_test = loader.load_dat
 num_classes = np.unique(labels).shape[0]
 graph_dict = {'strategy': 'spatial'}
 emotions = ['Angry', 'Neutral', 'Happy', 'Sad']
+model_name = "epoch414_acc84.44_model.pth.tar"
 
 if args.train:
   data_loader = {'train': torch.utils.data.DataLoader(dataset=loader.TrainTestLoader(data_train, labels_train, joints, coords, num_classes), batch_size=args.batch_size, shuffle=True, drop_last=True), 'test': torch.utils.data.DataLoader(dataset=loader.TrainTestLoader(data_test, labels_test, joints, coords, num_classes), batch_size=args.batch_size, shuffle=True, drop_last=True)}
@@ -60,14 +61,14 @@ if args.train:
   pr = processor.Processor(args, data_loader, coords, num_classes, graph_dict, device=device, verbose=True)
   pr.train(data_test[0:1], labels_test[0:1])
 else:
-  pr = processor.Processor(args, None, coords, num_classes, graph_dict, device=device, verbose=True, model_file=model_path + "\epoch54_acc73.33_model.pth.tar")
+  pr = processor.Processor(args, None, coords, num_classes, graph_dict, device=device, verbose=True, model_file=model_path + "\\" + model_name)
 
   pr.generate_confusion_matrix(None, data, labels, num_classes, joints, coords)
 
   labels_pred, vecs_pred = pr.generate_predictions(data_test[:], num_classes, joints, coords)
   for idx in range(labels_pred.shape[0]):
     print('S.N.: {0:<4}\t Actual: {1:<10} \tPredicted: {2:<10}'.format(str(idx + 1), emotions[int(labels_test[idx])], emotions[int(labels_pred[idx])]))
-
+  print(labels_test, labels_pred)
 if args.smap:
   pr.smap()
 if args.save_features:

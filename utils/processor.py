@@ -154,9 +154,8 @@ def get_best_epoch_and_accuracy(path_to_model_files):
 
 
 def plot_confusion_matrix(confusion_matrix, title='CM', fontsize=50):
-  print(confusion_matrix)
   mpl.style.use('seaborn')
-  rcParams['text.usetex'] = True
+  # rcParams['text.usetex'] = True
   rcParams['axes.titlepad'] = 20
 
   columns = ('Angry', 'Neutral', 'Happy', 'Sad')
@@ -193,7 +192,7 @@ def plot_confusion_matrix(confusion_matrix, title='CM', fontsize=50):
 
   # Add a table at the bottom of the axes
   the_table = plt.table(cellText=cell_text, rowLabels=rows, rowColours=colors, colLabels=columns, loc='bottom')
-  print(the_table)
+
   the_table.set_fontsize(fontsize)
   the_table.scale(1, fontsize / 7)
 
@@ -205,6 +204,77 @@ def plot_confusion_matrix(confusion_matrix, title='CM', fontsize=50):
   plt.ylabel("\# predictions of each class", fontsize=fontsize)
   plt.xticks([])
   fig.savefig("C:\\Users\\saroj\\Documents\\ukg\\gait\\gait-emotion\\figures\\" + title + '.png', bbox_inches='tight')
+
+
+def plot_confusion_matrix_custom(cm, target_names, title='Confusion matrix', cmap=None, normalize=True):
+  """
+    given a sklearn confusion matrix (cm), make a nice plot
+
+    Arguments
+    ---------
+    cm:           confusion matrix from sklearn.metrics.confusion_matrix
+
+    target_names: given classification classes such as [0, 1, 2]
+                  the class names, for example: ['high', 'medium', 'low']
+
+    title:        the text to display at the top of the matrix
+
+    cmap:         the gradient of the values displayed from matplotlib.pyplot.cm
+                  see http://matplotlib.org/examples/color/colormaps_reference.html
+                  plt.get_cmap('jet') or plt.cm.Blues
+
+    normalize:    If False, plot the raw numbers
+                  If True, plot the proportions
+
+    Usage
+    -----
+    plot_confusion_matrix(cm           = cm,                  # confusion matrix created by
+                                                              # sklearn.metrics.confusion_matrix
+                          normalize    = True,                # show proportions
+                          target_names = y_labels_vals,       # list of names of the classes
+                          title        = best_estimator_name) # title of graph
+
+    Citiation
+    ---------
+    http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
+
+    """
+  import matplotlib.pyplot as plt
+  import numpy as np
+  import itertools
+
+  accuracy = np.trace(cm) / float(np.sum(cm))
+  misclass = 1 - accuracy
+
+  if cmap is None:
+    cmap = plt.get_cmap('Blues')
+
+  rcParams.update({'figure.autolayout': True})
+  plt.figure(figsize=(10, 8))
+  plt.imshow(cm, interpolation='nearest', cmap=cmap)
+  plt.title(title)
+  plt.colorbar()
+
+  if target_names is not None:
+    tick_marks = np.arange(len(target_names))
+    plt.xticks(tick_marks, target_names, rotation=45)
+    plt.yticks(tick_marks, target_names)
+
+  if normalize:
+    cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+
+  thresh = cm.max() / 1.5 if normalize else cm.max() / 2
+  for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+    if normalize:
+      plt.text(j, i, "{:0.4f}".format(cm[i, j]), horizontalalignment="center", color="white" if cm[i, j] > thresh else "black")
+    else:
+      plt.text(j, i, "{:,}".format(cm[i, j]), horizontalalignment="center", color="white" if cm[i, j] > thresh else "black")
+
+  plt.tight_layout()
+  plt.ylabel('True label')
+  plt.xlabel('Predicted label\naccuracy={:0.4f}; misclass={:0.4f}'.format(accuracy, misclass))
+  plt.savefig("cm_300.png")
+  plt.show()
 
 
 class Processor(object):
@@ -229,7 +299,10 @@ class Processor(object):
     if not os.path.isdir(self.args.work_dir):
       os.mkdir(self.args.work_dir)
     self.model = classifier.Classifier(C, num_classes, graph_dict)
-    # self.model.cuda('cuda:0')
+
+    if self.device == 'cuda:0':
+      self.model.cuda('cuda:0')
+
     self.model.apply(weights_init)
 
     self.loss = nn.CrossEntropyLoss()
@@ -247,12 +320,14 @@ class Processor(object):
     else:
       raise ValueError()
     self.lr = self.args.base_lr
-
+    self.model_file = model_file
     if model_file:
       print("Loading pretraied model ", model_file)
       self.model.load_state_dict(torch.load(model_file))
       self.model.eval()
       print("Loaded pretrained model")
+    self.validation_loss = []
+    self.training_loss = []
 
   def adjust_lr(self):
 
@@ -301,7 +376,7 @@ class Processor(object):
       print_epoch = self.best_epoch if self.best_epoch is not None else 0
       self.io.print_log('\tTop{}: {:.2f}%. Best so far: {:.2f}% (epoch: {:d}).'.format(k, accuracy, self.best_accuracy[0, k - 1], print_epoch))
 
-  def per_train(self):
+  def per_train(self, epoch):
 
     self.model.train()
     self.adjust_lr()
@@ -330,6 +405,8 @@ class Processor(object):
       self.meta_info['iter'] += 1
 
     self.epoch_info['mean_loss'] = np.mean(loss_value)
+    if self.verbose and epoch % self.args.eval_interval == 0:
+      self.training_loss.append(np.mean(loss_value))
     self.show_epoch_info()
     if self.verbose:
       self.io.print_timer()
@@ -367,6 +444,7 @@ class Processor(object):
     if evaluation:
       self.label = np.concatenate(label_frag)
       self.epoch_info['mean_loss'] = np.mean(loss_value)
+      self.validation_loss.append(np.mean(loss_value))
       self.show_epoch_info()
 
       # show top-k accuracy
@@ -378,15 +456,16 @@ class Processor(object):
       self.meta_info['epoch'] = epoch
       # training
       if self.verbose and epoch % self.args.eval_interval == 0:
-        self.io.print_log('Training epoch: {}'.format(epoch))
-      self.per_train()
+        self.io.print_log('----------Training epoch---------: {}'.format(epoch))
+      self.per_train(epoch)
       if self.verbose:
         self.io.print_log('Done.')
 
       # evaluation
+      # if self.verbose and epoch % self.args.eval_interval == 0:
       if (epoch % self.args.eval_interval == 0) or (epoch + 1 == self.args.num_epoch):
         if self.verbose:
-          self.io.print_log('Eval epoch: {}'.format(epoch))
+          self.io.print_log('*******Eval epoch********: {}'.format(epoch))
         self.per_test()
         if self.verbose:
           self.io.print_log('Done.')
@@ -397,6 +476,8 @@ class Processor(object):
         if self.epoch_info['mean_loss'] < self.best_loss:
           self.best_loss = self.epoch_info['mean_loss']
         self.best_epoch = epoch
+    self.io.print_log("Validation Loss: {}".format(self.validation_loss))
+    self.io.print_log("Training Loss: {}".format(self.training_loss))
 
   def test(self):
 
@@ -439,7 +520,7 @@ class Processor(object):
       best_accuracy = self.best_accuracy.item()
 
     # filename = os.path.join(self.args.work_dir, 'epoch{}_acc{:.2f}_model.pth.tar'.format(self.best_epoch, best_accuracy))
-    filename = os.path.join(self.args.work_dir, 'epoch54_acc73.33_model.pth.tar')
+    filename = os.path.join(self.model_file)
     self.model.load_state_dict(torch.load(filename))
 
   def generate_predictions(self, data, num_classes, joints, coords):
@@ -477,7 +558,8 @@ class Processor(object):
     for midx in np.arange(len(miss[0])):
       confusion_matrix[np.int(labels[miss[0][midx]]), np.int(labels_pred[miss[0][midx]])] += 1
     confusion_matrix = confusion_matrix.transpose()
-    plot_confusion_matrix(confusion_matrix)
+    print(confusion_matrix)
+    plot_confusion_matrix_custom(cm=np.array(confusion_matrix), normalize=False, target_names=['Angry', 'Neutral', 'Happy', 'Sad'], title="")
 
   def save_best_feature(self, ftype, data, joints, coords):
     if self.best_epoch is None:
