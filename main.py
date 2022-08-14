@@ -8,7 +8,7 @@ from net import classifier
 
 root_path = os.path.dirname(os.path.realpath(__file__))
 data_path = os.path.join(root_path, "data")
-ftype = '_ELMD'  #'4DCVAEGCN'  # '_ELMD'
+ftype = '_bhatta'  #'_ELMD'  #'_4DCVAEGCN'  # '_ELMD'
 coords = 3
 joints = 16
 cycles = 1
@@ -53,7 +53,10 @@ emotions = ['Angry', 'Neutral', 'Happy', 'Sad']
 model_name = "epoch414_acc84.44_model.pth.tar"
 
 if args.train:
-  data_loader = {'train': torch.utils.data.DataLoader(dataset=loader.TrainTestLoader(data_train, labels_train, joints, coords, num_classes), batch_size=args.batch_size, shuffle=True, drop_last=True), 'test': torch.utils.data.DataLoader(dataset=loader.TrainTestLoader(data_test, labels_test, joints, coords, num_classes), batch_size=args.batch_size, shuffle=True, drop_last=True)}
+  data_loader = {'train': torch.utils.data.DataLoader(dataset=loader.TrainTestLoader(data_train, labels_train, \
+    joints, coords, num_classes), batch_size=args.batch_size, shuffle=True, drop_last=True), \
+      'test': torch.utils.data.DataLoader(dataset=loader.TrainTestLoader(data_test, labels_test, \
+        joints, coords, num_classes), batch_size=args.batch_size, shuffle=True, drop_last=True)}
 
   print('Train set size: {:d}'.format(len(data_train)))
   print('Test set size: {:d}'.format(len(data_test)))

@@ -20,12 +20,3 @@ print(precision, recall)
 # # function to show the plot
 # plt.savefig("epoch_300.png")
 # plt.show()
-
-# 0.980256
-# 0.60522
-# 0.7789
-
-9475
-9691
-2517
-0
