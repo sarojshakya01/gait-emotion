@@ -8,7 +8,7 @@ from net import classifier
 
 root_path = os.path.dirname(os.path.realpath(__file__))
 data_path = os.path.join(root_path, "data")
-ftype = '_bhatta'  #'_ELMD'  #'_4DCVAEGCN'  # '_ELMD'
+ftype = '_ELMD'  #'_bhatta'  #'_4DCVAEGCN'  # '_ELMD'
 coords = 3
 joints = 16
 cycles = 1
@@ -47,10 +47,11 @@ test_size = 0.1
 # data, labels, data_train, labels_train, data_test, labels_test = loader.load_data(
 #     data_path, ftype, coords, joints, cycles=cycles, test_size=test_size)
 data, labels, data_train, labels_train, data_test, labels_test = loader.load_data_npy(data_path, ftype, test_size=test_size)
+
 num_classes = np.unique(labels).shape[0]
 graph_dict = {'strategy': 'spatial'}
 emotions = ['Angry', 'Neutral', 'Happy', 'Sad']
-model_name = "epoch414_acc84.44_model.pth.tar"
+model_name = "epoch413_acc84.44_model.pth.tar"
 
 if args.train:
   data_loader = {'train': torch.utils.data.DataLoader(dataset=loader.TrainTestLoader(data_train, labels_train, \
@@ -66,12 +67,16 @@ if args.train:
 else:
   pr = processor.Processor(args, None, coords, num_classes, graph_dict, device=device, verbose=True, model_file=model_path + "\\" + model_name)
 
-  pr.generate_confusion_matrix(None, data, labels, num_classes, joints, coords)
-
-  labels_pred, vecs_pred = pr.generate_predictions(data_test[:], num_classes, joints, coords)
-  for idx in range(labels_pred.shape[0]):
-    print('S.N.: {0:<4}\t Actual: {1:<10} \tPredicted: {2:<10}'.format(str(idx + 1), emotions[int(labels_test[idx])], emotions[int(labels_pred[idx])]))
-  print(labels_test, labels_pred)
+  # pr.generate_confusion_matrix(None, data, labels, num_classes, joints, coords)
+  # print(len(labels))
+  # for i in range(len(labels)):
+  #   if labels[i] == 2:
+  #     print(i)
+  labels_pred, vecs_pred = pr.generate_predictions(data[:], num_classes, joints, coords)
+  # for idx in range(labels_pred.shape[0]):
+  for idx in range(len(labels_pred)):
+    print('S.N.: {0:<4}\t Actual: {1:<10} \tPredicted: {2:<10}'.format(str(idx + 1), emotions[int(labels[idx])], emotions[int(labels_pred[idx])]))
+  # print(labels_test, labels_pred)
 if args.smap:
   pr.smap()
 if args.save_features:

@@ -13,8 +13,8 @@ for f, filename in enumerate(os.listdir(json_path)):
   # clamp the ends
   if f <= 50:
     continue
-  elif f > 290:
-    break
+  # elif f > 290:
+  # break
   time_steps += 1
   print("Processing", f, "file:", filename)
   file = open(json_path + filename)

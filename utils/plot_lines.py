@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from utils.Quaternions import Quaternions
 
 
-def animation_plot(animations, filename=None, ignore_root=True, interval=33.33):
+def animation_plot(animations, filename=None, ignore_root=True, interval=33.33, predicted="angry"):
 
   for ai in range(len(animations)):
     anim = np.swapaxes(animations[ai][0].copy(), 0, 1)
@@ -36,6 +36,9 @@ def animation_plot(animations, filename=None, ignore_root=True, interval=33.33):
   ax.set_xlim3d(-scale * 50, scale * 50)
   ax.set_zlim3d(0, scale * 40)
   ax.set_ylim3d(-scale * 50, scale * 50)
+
+  label = 'Actual: %s, Predicted: %s' % (filename.title(), predicted.title())
+  ax.text(0, 0, 10, label, 'x')
 
   lines = []
   acolors = list(sorted(colors.cnames.keys()))[::-1]

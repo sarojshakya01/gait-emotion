@@ -4,7 +4,7 @@ import sys
 
 sys.path.append('../test')
 
-from test.plot_lines_2d import plot_and_animate
+from utils.plot_lines import animation_plot
 
 import os
 import h5py
@@ -12,7 +12,7 @@ import utils.common
 
 root_path = os.path.dirname(os.path.realpath(__file__))
 data_path = os.path.join(root_path, "data")
-type = ''  # '' or '4DCVAEGCN' or '_ELMD'
+type = '_ELMD'  # '' or '4DCVAEGCN' or '_ELMD'
 feature_file_name = 'features' + type + '.h5'
 npy_file_name = 'features' + type + '.npy'
 
@@ -49,8 +49,8 @@ npy_path = os.path.join(data_path, npy_file_name)
 # print("Saving data...")
 # np.save(npy_path, data)
 
-# data = np.load(npy_path)
-data = np.load("test.npy")
+data = np.load(npy_path)
+# data = np.load("test.npy")
 clips = data
 
 print("Orig shape: ", clips.shape)
@@ -58,8 +58,12 @@ print("Orig shape: ", clips.shape)
 clips = np.swapaxes(clips, 1, 2)
 
 print("After swap: ", clips.shape)
-seq1 = clips[0:1]
+sad = clips[69:70]  # predicted Neutral
+neutral = clips[1830:1831]  # Predicted Neutral
+happy = clips[1798:1899]  # Happy
+angry = clips[1698:1699]  # angry
+# seq1 = clips[69:70]
 # seq2 = clips[1:2]
 # seq3 = clips[2:3]
 
-# animation_plot([seq2], filename=npy_path + ".mp4", interval=100.15)
+animation_plot([angry], filename="angry", interval=100.15, predicted="angry")

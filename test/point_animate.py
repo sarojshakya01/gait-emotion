@@ -238,7 +238,7 @@ def animate(i):
 
     global glider
     x, y = zip(*gliders[i])
-    print(x, y)
+    # print(x, y)
     frame = animations[0][i]
     ax.clear()
     ax.axis([-200, 800, -500, 400])
@@ -249,4 +249,6 @@ def animate(i):
 
 ax.axis([-200, 800, -500, 400])
 ani = animation.FuncAnimation(fig, animate, interval=10)
-plt.show()
+# plt.show()
+writergif = animation.PillowWriter(fps=24)
+ani.save("man_side_gait.gif" + ".gif", writer=writergif)
