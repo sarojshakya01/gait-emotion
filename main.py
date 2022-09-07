@@ -9,7 +9,7 @@ from net import classifier
 root_path = os.path.dirname(os.path.realpath(__file__))
 data_path = os.path.join(root_path, "data")
 ftype = '_bhatta'  #'_ELMD'  #'_4DCVAEGCN'  # '_ELMD'
-coords = 3
+coords = 2
 joints = 16
 cycles = 1
 model_path = os.path.join(root_path, 'model' + ftype)
