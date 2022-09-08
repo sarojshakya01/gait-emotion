@@ -15,15 +15,22 @@ def load_data_npy(_path, _ftype, test_size=0.1):
   print("Loading data...", file_feature_npy)
   data = np.load(file_feature_npy)
 
-  file_label = os.path.join(_path, 'labels' + _ftype + '.h5')
-  fl = h5py.File(file_label, 'r')
-  num_samples = len(fl.keys())
-  label = np.empty(num_samples)
+  # file_label = os.path.join(_path, 'labels' + _ftype + '.h5')
+  # fl = h5py.File(file_label, 'r')
+  # num_samples = len(fl.keys())
+  # label = np.empty(num_samples)
+
+  file_label_npy = os.path.join(_path, 'labels' + _ftype + '.npy')
+  print("Loading data...", file_label_npy)
+  label = np.load(file_label_npy)
+
+  num_samples = label.shape[0]
+  print("Total data: ", num_samples)
   new_label = []
   new_data = []
 
-  for sidx in range(num_samples):
-    label[sidx] = fl[list(fl.keys())[sidx]][()]
+  # for sidx in range(num_samples):
+  #   label[sidx] = fl[list(fl.keys())[sidx]][()]
 
   datacount = {'angry': 0, 'neutral': 0, 'happy': 0, 'sad': 0}
   count = 0

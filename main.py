@@ -8,7 +8,7 @@ from net import classifier
 
 root_path = os.path.dirname(os.path.realpath(__file__))
 data_path = os.path.join(root_path, "data")
-ftype = '_ELMD'  #'_bhatta'  #'_4DCVAEGCN'  # '_ELMD'
+ftype = '_ELMDaug'  #'_bhatta'  #'_4DCVAEGCN'  # '_ELMD'
 coords = 3
 joints = 16
 cycles = 1
@@ -51,7 +51,7 @@ data, labels, data_train, labels_train, data_test, labels_test = loader.load_dat
 num_classes = np.unique(labels).shape[0]
 graph_dict = {'strategy': 'spatial'}
 emotions = ['Angry', 'Neutral', 'Happy', 'Sad']
-model_name = "epoch413_acc84.44_model.pth.tar"
+model_name = "epoch454_acc85.42_model.pth.tar"
 
 if args.train:
   data_loader = {'train': torch.utils.data.DataLoader(dataset=loader.TrainTestLoader(data_train, labels_train, \
@@ -67,11 +67,11 @@ if args.train:
 else:
   pr = processor.Processor(args, None, coords, num_classes, graph_dict, device=device, verbose=True, model_file=model_path + "\\" + model_name)
 
-  # pr.generate_confusion_matrix(None, data, labels, num_classes, joints, coords)
-  # print(len(labels))
-  # for i in range(len(labels)):
-  #   if labels[i] == 2:
-  #     print(i)
+  pr.generate_confusion_matrix(None, data, labels, num_classes, joints, coords)
+  print(len(labels))
+  for i in range(len(labels)):
+    if labels[i] == 2:
+      print(i)
   labels_pred, vecs_pred = pr.generate_predictions(data[:], num_classes, joints, coords)
   # for idx in range(labels_pred.shape[0]):
   for idx in range(len(labels_pred)):

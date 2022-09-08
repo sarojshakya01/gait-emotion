@@ -65,5 +65,10 @@ angry = clips[1698:1699]  # angry
 # seq1 = clips[69:70]
 # seq2 = clips[1:2]
 # seq3 = clips[2:3]
+# temp = np.swapaxes(angry, 1, 2)
+# print(temp.shape)
+# print(temp[0][1])
+# temp = temp + 0.2
+# print(temp[0][1])
 
-animation_plot([angry], filename="angry", interval=100.15, predicted="angry")
+animation_plot([angry * 2], filename="angry", interval=100.15, predicted="angry")
