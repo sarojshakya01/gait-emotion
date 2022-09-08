@@ -13,17 +13,17 @@ def animation_plot(animations, filename=None, ignore_root=True, interval=33.33):
   for ai in range(len(animations)):
     anim = np.swapaxes(animations[ai][0].copy(), 0, 1)
     joints, root_x, root_z, root_r = anim[:, :], anim[:, 0], anim[:, 1], anim[:, 2]
-    joints = joints.reshape((len(joints), -1, 3))
+    joints = joints.reshape((len(joints), -1, 2))
     joints[:, :, 0] *= 10
     joints[:, :, 1] *= 5
-    joints[:, :, 2] *= 10
+    # joints[:, :, 2] *= 10
     rotation = Quaternions.id(1)
     translation = np.array([[0, 0, 0]])
     if not ignore_root:
       for i in range(len(joints)):
         joints[i, :, :] = rotation * joints[i]
         joints[i, :, 0] = joints[i, :, 0] + translation[0, 0]
-        joints[i, :, 2] = joints[i, :, 2] + translation[0, 2]
+        # joints[i, :, 2] = joints[i, :, 2] + translation[0, 2]
         rotation = Quaternions.from_angle_axis(-root_r[i], np.array([0, 1, 0])) * rotation
         translation = translation + rotation * np.array([root_x[i], 0, root_z[i]])
 

@@ -4,7 +4,8 @@ import numpy as np
 import os
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
-data = np.load("test.npy")
+# data = np.load("test.npy")
+data = np.load("data/features2d_ELMD.npy")
 # data = np.load(os.path.join(current_dir, "../data/features_bhatta.npy"))
 
 data = data[0:1]
@@ -226,6 +227,100 @@ def drawLines2(frame):
   if (0 not in x_values and 0 not in y_values):
     ax.plot(x_values, y_values, 'bo', linestyle="-")
 
+def drawLines3(frame):
+
+  mat, = ax.plot(0, 0, 'o')
+  # for i, coord in enumerate(frame):
+  x_values = [frame[0, 0], frame[1, 0]]
+  y_values = [frame[0, 1], frame[1, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[1, 0], frame[2, 0]]
+  y_values = [frame[1, 1], frame[2, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[2, 0], frame[3, 0]]
+  y_values = [frame[2, 1], frame[3, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[2, 0], frame[4, 0]]
+  y_values = [frame[2, 1], frame[4, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[4, 0], frame[5, 0]]
+  y_values = [frame[4, 1], frame[5, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[5, 0], frame[6, 0]]
+  y_values = [frame[5, 1], frame[6, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[2, 0], frame[7, 0]]
+  y_values = [frame[2, 1], frame[7, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[7, 0], frame[8, 0]]
+  y_values = [frame[7, 1], frame[8, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[8, 0], frame[9, 0]]
+  y_values = [frame[8, 1], frame[9, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[0, 0], frame[10, 0]]
+  y_values = [frame[0, 1], frame[10, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[10, 0], frame[11, 0]]
+  y_values = [frame[10, 1], frame[11, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[11, 0], frame[12, 0]]
+  y_values = [frame[11, 1], frame[12, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[0, 0], frame[13, 0]]
+  y_values = [frame[0, 1], frame[13, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[13, 0], frame[14, 0]]
+  y_values = [frame[13, 1], frame[14, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
+  x_values = [frame[14, 0], frame[15, 0]]
+  y_values = [frame[14, 1], frame[15, 1]]
+
+  if (0 not in x_values and 0 not in y_values):
+    ax.plot(x_values, y_values, 'bo', linestyle="-")
+
 
 mat, = ax.plot(1000, 1000, 'o')
 
@@ -238,15 +333,34 @@ def animate(i):
 
     global glider
     x, y = zip(*gliders[i])
-    print(x, y)
+    print(x, y, "Saroj")
     frame = animations[0][i]
     ax.clear()
-    ax.axis([-200, 800, -500, 400])
-    drawLines(frame)
+    ax.axis([0, 3, 0, 3])
+    # drawLines(frame)
+    drawLines3(frame)
 
     return mat,
 
 
-ax.axis([-200, 800, -500, 400])
+ax.axis([0, 3, 0, 3])
 ani = animation.FuncAnimation(fig, animate, interval=10)
+drawLines(animations[0][1])
+# print(animations[0][0])
+# ax.plot(animations[0][0][0][0], animations[0][0][0][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][1][0], animations[0][0][1][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][2][0], animations[0][0][2][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][3][0], animations[0][0][3][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][4][0], animations[0][0][4][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][5][0], animations[0][0][5][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][6][0], animations[0][0][6][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][7][0], animations[0][0][7][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][8][0], animations[0][0][8][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][9][0], animations[0][0][9][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][10][0], animations[0][0][10][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][11][0], animations[0][0][11][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][12][0], animations[0][0][12][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][13][0], animations[0][0][13][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][14][0], animations[0][0][14][1], 'bo', linestyle="-")
+# ax.plot(animations[0][0][15][0], animations[0][0][15][1], 'bo', linestyle="-")
 plt.show()

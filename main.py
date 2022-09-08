@@ -8,7 +8,7 @@ from net import classifier
 
 root_path = os.path.dirname(os.path.realpath(__file__))
 data_path = os.path.join(root_path, "data")
-ftype = '_bhatta'  #'_ELMD'  #'_4DCVAEGCN'  # '_ELMD'
+ftype = '2d_ELMD'  #'_ELMD'  #'_4DCVAEGCN'  # '_ELMD'
 coords = 2
 joints = 16
 cycles = 1
@@ -41,7 +41,7 @@ parser.add_argument('--work-dir', type=str, default=model_path, metavar='WD', he
 # TO ADD: save_result
 
 args = parser.parse_args()
-device = 'cuda:0'
+device = 'cpu'
 
 test_size = 0.1
 # data, labels, data_train, labels_train, data_test, labels_test = loader.load_data(

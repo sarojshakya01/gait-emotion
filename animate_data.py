@@ -4,7 +4,7 @@ import sys
 
 sys.path.append('../test')
 
-from test.plot_lines_2d import plot_and_animate
+from utils.plot_lines import animation_plot
 
 import os
 import h5py
@@ -50,7 +50,7 @@ npy_path = os.path.join(data_path, npy_file_name)
 # np.save(npy_path, data)
 
 # data = np.load(npy_path)
-data = np.load("test.npy")
+data = np.load("data/features2d_ELMD.npy")
 clips = data
 
 print("Orig shape: ", clips.shape)
@@ -59,7 +59,7 @@ clips = np.swapaxes(clips, 1, 2)
 
 print("After swap: ", clips.shape)
 seq1 = clips[0:1]
-# seq2 = clips[1:2]
+seq2 = clips[1:2]
 # seq3 = clips[2:3]
 
-# animation_plot([seq2], filename=npy_path + ".mp4", interval=100.15)
+animation_plot([seq2], filename=npy_path + ".mp4", interval=100.15)
