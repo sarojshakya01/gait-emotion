@@ -9,7 +9,7 @@ from utils import common
 import torch
 
 
-def load_data_npy(_path, _ftype, test_size=0.1):
+def load_data_npy(_path, _ftype, coords, joints, test_size=0.1):
 
   file_feature_npy = os.path.join(_path, 'features' + _ftype + '.npy')
   print("Loading data...", file_feature_npy)
@@ -77,7 +77,11 @@ def load_data_npy(_path, _ftype, test_size=0.1):
   new_data = np.array(new_data)
   new_label = np.array(new_label)
 
+  # data_train, data_test, labels_train, labels_test = train_test_split(new_data, new_label, test_size=test_size)
+  # reshaped_data = np.reshape(new_data, (new_data.shape[0], new_data.shape[1], joints, coords))
+  # new_data = common.get_affective_features(reshaped_data)
   data_train, data_test, labels_train, labels_test = train_test_split(new_data, new_label, test_size=test_size)
+
   print("Loading completed!!")
   return new_data, new_label, data_train, labels_train, data_test, labels_test
 

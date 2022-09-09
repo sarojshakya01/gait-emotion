@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 current_dir = os.path.dirname(os.path.realpath(__file__))
-data = np.load("test.npy")
+data = np.load(os.path.join(current_dir, "test.npy"))
 # data = np.load(os.path.join(current_dir, "../data/features_bhatta.npy"))
 
 data = data[0:1]
@@ -249,6 +249,6 @@ def animate(i):
 
 ax.axis([-200, 800, -500, 400])
 ani = animation.FuncAnimation(fig, animate, interval=10)
-# plt.show()
+plt.show()
 writergif = animation.PillowWriter(fps=24)
 ani.save("man_side_gait.gif" + ".gif", writer=writergif)

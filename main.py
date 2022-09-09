@@ -22,7 +22,7 @@ parser.add_argument('--save-features', type=lambda x: (str(x).lower() == 'true')
 parser.add_argument('--batch-size', type=int, default=6, metavar='B', help='input batch size for training (default: 6)')
 parser.add_argument('--num-worker', type=int, default=4, metavar='W', help='input batch size for training (default: 4)')
 parser.add_argument('--start_epoch', type=int, default=0, metavar='SE', help='starting epoch of training (default: 0)')
-parser.add_argument('--num_epoch', type=int, default=500, metavar='NE', help='number of epochs to train (default: 500)')
+parser.add_argument('--num_epoch', type=int, default=1000, metavar='NE', help='number of epochs to train (default: 500)')
 parser.add_argument('--optimizer', type=str, default='Adam', metavar='O', help='optimizer (default: Adam)')
 parser.add_argument('--base-lr', type=float, default=0.01, metavar='L', help='base learning rate (default: 0.01)')
 parser.add_argument('--step', type=list, default=[0.5, 0.75, 0.875], metavar='[S]', help='fraction of steps when learning rate will be decreased (default: [0.5, 0.75, 0.875])')
@@ -46,12 +46,12 @@ device = 'cuda:0'
 test_size = 0.1
 # data, labels, data_train, labels_train, data_test, labels_test = loader.load_data(
 #     data_path, ftype, coords, joints, cycles=cycles, test_size=test_size)
-data, labels, data_train, labels_train, data_test, labels_test = loader.load_data_npy(data_path, ftype, test_size=test_size)
+data, labels, data_train, labels_train, data_test, labels_test = loader.load_data_npy(data_path, ftype, coords, joints, test_size=test_size)
 
 num_classes = np.unique(labels).shape[0]
 graph_dict = {'strategy': 'spatial'}
 emotions = ['Angry', 'Neutral', 'Happy', 'Sad']
-model_name = "epoch454_acc85.42_model.pth.tar"
+model_name = "epoch894_acc91.41_model.pth.tar"
 
 if args.train:
   data_loader = {'train': torch.utils.data.DataLoader(dataset=loader.TrainTestLoader(data_train, labels_train, \
