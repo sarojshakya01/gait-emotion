@@ -9,6 +9,7 @@ from net import classifier
 root_path = os.path.dirname(os.path.realpath(__file__))
 data_path = os.path.join(root_path, "data")
 ftype = '2d_ELMD'  #'_ELMD'  #'_4DCVAEGCN'  # '_ELMD'
+model_name = "epoch419_acc81.11_model.pth.tar"
 coords = 2
 joints = 16
 cycles = 1
@@ -41,7 +42,7 @@ parser.add_argument('--work-dir', type=str, default=model_path, metavar='WD', he
 # TO ADD: save_result
 
 args = parser.parse_args()
-device = 'cpu'
+device = 'cuda:0'
 
 test_size = 0.1
 # data, labels, data_train, labels_train, data_test, labels_test = loader.load_data(
@@ -50,7 +51,6 @@ data, labels, data_train, labels_train, data_test, labels_test = loader.load_dat
 num_classes = np.unique(labels).shape[0]
 graph_dict = {'strategy': 'spatial'}
 emotions = ['Angry', 'Neutral', 'Happy', 'Sad']
-model_name = "epoch414_acc84.44_model.pth.tar"
 
 if args.train:
   data_loader = {'train': torch.utils.data.DataLoader(dataset=loader.TrainTestLoader(data_train, labels_train, \
