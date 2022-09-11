@@ -51,7 +51,7 @@ data, labels, data_train, labels_train, data_test, labels_test = loader.load_dat
 num_classes = np.unique(labels).shape[0]
 graph_dict = {'strategy': 'spatial'}
 emotions = ['Angry', 'Neutral', 'Happy', 'Sad']
-model_name = "epoch894_acc91.41_model.pth.tar"
+model_name = "epoch454_acc85.42_model.pth.tar"
 
 if args.train:
   data_loader = {'train': torch.utils.data.DataLoader(dataset=loader.TrainTestLoader(data_train, labels_train, \
