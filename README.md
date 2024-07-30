@@ -9,7 +9,7 @@ This project involves using gait analysis to detect human emotions. It leverages
 - [Usage](#usage)
 - [Directory Structure](#directory-structure)
 - [Contributing](#contributing)
-- [License](#license)
+- [References](#reference)
 
 ## Introduction
 The goal of this project is to analyze human gait data and detect emotions based on the analysis. This can have applications in security, healthcare, and entertainment.
@@ -67,8 +67,11 @@ The goal of this project is to analyze human gait data and detect emotions based
 ## Contributing
 Contributions are welcome! Please fork the repository and create a pull request with your changes.
 
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+## Reference
+### Paper
+`https://arxiv.org/abs/1910.12906`
+### Code
+`https://github.com/UttaranB127/GeneratingEmotiveGaits`
 
 ---
 
