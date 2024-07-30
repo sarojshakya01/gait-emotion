@@ -1,0 +1,16 @@
+torch==1.5.1
+torchvision==0.6.1
+cudatoolkit==10.1
+h5py
+tqdm
+python-dotenv
+requests
+matplotlib
+mysqlclient
+scikit-learn
+tensorboardx
+tensorboard
+tensorflow
+einops
+thop
+python_papi
